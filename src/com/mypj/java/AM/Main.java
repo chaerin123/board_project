@@ -17,21 +17,21 @@ public class Main {
     //Article클래스의 객체를 담기 위한 리스트를 생성한다
 
 
-    while (true){
+    while (true) {
       System.out.print("명령어 입력>>");
       //String cmd = sc.nextLine();
       //스캐너 객체인 sc를 사용해 사용자의 입력을 받는다. 'sc.next()'는 다음에 입력된 문자열을 읽어들인다. 이를 cmd라는 변수에 저장
       String cmd = sc.nextLine().trim();
       //trim() : 문자열의 앞뒤 공백을 제거하여 정제된 문자열을 만든다
 
-      if(cmd.length() == 0){ //명령어를 입력하지 않은 경우
+      if (cmd.length() == 0) { //명령어를 입력하지 않은 경우
         continue;
       }
-      if (cmd.equals("system exit")){ //cmd로 입력받은 문장이 다음에 오는 문장과 같을 경우
+      if (cmd.equals("system exit")) { //cmd로 입력받은 문장이 다음에 오는 문장과 같을 경우
         break; //반복문을 나감, 프로그램 종료
       }
 
-      if(cmd.equals("article write")){
+      if (cmd.equals("article write")) {
         int id = lastArticleId + 1; //게시물 번호 부여
         lastArticleId = id;
 
@@ -49,61 +49,89 @@ public class Main {
         System.out.printf("%d번 글이 생성되었습니다", id);
 
       } else if (cmd.equals("article list")) {
-        if(articles.size() == 0){
+        if (articles.size() == 0) {
           System.out.println("게시글이 없습니다.");
-        } else{
+        } else {
           System.out.println("번호   |   제목");
-          for(int i = articles.size() - 1; i >= 0 ; i--){
+          for (int i = articles.size() - 1; i >= 0; i--) {
             Article article = articles.get(i);
             //get() : list에 담긴 값을 가져올 때
             //현재 인덱스 i에 해당하는 articles 리스트의 글을 가져와서 article 변수에 할당
             System.out.printf("%d   |    %s \n", article.id, article.title);
           }
         }
-      }else if(cmd.startsWith("article delete")){
+      } else if (cmd.startsWith("article delete")) {
         String[] cmdBits = cmd.split(" ");
         int id = Integer.parseInt(cmdBits[2]);
 
         int foundIdx = -1; //인덱스가 0부터 시작
 
-        for(int i=0; i < articles.size(); i++){
+        for (int i = 0; i < articles.size(); i++) {
           Article article = articles.get(i);
 
-          if(article.id == id){
+          if (article.id == id) {
             foundIdx = i;
             break;
           }
         }
-        if(foundIdx == -1){
+        if (foundIdx == -1) {
           System.out.printf("%d번 게시물은 존재하지 않습니다.", id);
+          continue;
         }
 
         articles.remove(foundIdx); //인덱스 부문을 삭제
         System.out.printf("%d번 게시물이 삭제 되었습니다\n", id);
-      }
-        else if (cmd.startsWith("article detail")) {
+
+      } else if (cmd.startsWith("article detail")) {
         String[] cmdBits = cmd.split(" ");
         int id = Integer.parseInt(cmdBits[2]);
 
         Article foundArticle = null;
-        for(int i = 0; i<articles.size(); i++){
+        for (int i = 0; i < articles.size(); i++) {
           Article article = articles.get(i);
 
-          if(article.id == id){
+          if (article.id == id) {
             foundArticle = article;
             break;
           }
         }
 
-        if(foundArticle == null) {
+        if (foundArticle == null) {
           System.out.printf("%d번 게시물은 존재하지 않습니다. \n", id);
           continue;
         }
-          System.out.printf("번호: %d\n", foundArticle.id);
-          System.out.printf("날짜: %s\n", foundArticle.regDate);
-          System.out.printf("제목: %s\n", foundArticle.title);
+        System.out.printf("번호: %d\n", foundArticle.id);
+        System.out.printf("날짜: %s\n", foundArticle.regDate);
+        System.out.printf("제목: %s\n", foundArticle.title);
         System.out.printf("내용: %s\n", foundArticle.body);
 
+      } else if (cmd.startsWith("article modify")) {
+          String[] cmdBits = cmd.split(" ");
+          int id = Integer.parseInt(cmdBits[2]);
+
+        Article foundArticle = null;
+          for (int i = 0; i < articles.size(); i++) {
+            Article article = articles.get(i);
+            if (article.id == id) {
+              foundArticle = article;
+              break;
+            }
+          }
+
+          if (foundArticle == null) {
+            System.out.printf("%d번 게시물은 존재하지 않습니다.", id);
+            continue;
+          }
+
+
+        System.out.print("제목 : ");
+        String title = sc.nextLine();
+        System.out.print("내용 : ");
+        String body = sc.nextLine();
+
+        foundArticle.title = title;
+        foundArticle.body = body;
+        System.out.printf("%d번 게시물이 수정 되었습니다\n", id);
       } else {
         System.out.println("존재하지 않는 명령어 입니다.");
       }
