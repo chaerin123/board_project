@@ -46,11 +46,11 @@ public class Main {
 
         Article article = new Article(id, regDate, title, body);
         articles.add(article);
-        System.out.printf("%d번 글이 생성되었습니다", id);
+        System.out.printf("%d번 글이 생성되었습니다.\n", id);
 
       } else if (cmd.startsWith("article list")) {
         if (articles.size() == 0) {
-          System.out.println("게시글이 없습니다.");
+          System.out.println("게시글이 없습니다.\n");
           continue;
         }
 
@@ -70,15 +70,15 @@ public class Main {
 
           //검색어는 있지만 검색 결과가 없는 경우
           if(forPrintArticles.size() == 0){
-            System.out.println("검색결과가 없습니다.");
+            System.out.println("검색결과가 없습니다.\n");
             continue;
           }
         }
 
-        System.out.printf("번호  |   제목");
-        for(int i= forPrintArticles.size() - 1 ; i>+0; i--){
+        System.out.printf("번호  |   제목    |  조회\n");
+        for(int i= forPrintArticles.size() - 1 ; i>=0; i--){
           Article article = forPrintArticles.get(i);
-          System.out.printf("%d  |  %s\n", article.id, article.title);
+          System.out.printf("%d  |   %s    |  %d\n", article.id, article.title, article.viewCnt);
         }
       } else if (cmd.startsWith("article delete")) {
         String[] cmdBits = cmd.split(" ");
@@ -95,7 +95,7 @@ public class Main {
           }
         }
         if (foundIdx == -1) {
-          System.out.printf("%d번 게시물은 존재하지 않습니다.", id);
+          System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
           continue;
         }
 
@@ -120,10 +120,14 @@ public class Main {
           System.out.printf("%d번 게시물은 존재하지 않습니다. \n", id);
           continue;
         }
+
+        foundArticle.increaseViewCnt();
+        //검색한 게시글의 조회수를 검색할 때마다 올리기
         System.out.printf("번호: %d\n", foundArticle.id);
         System.out.printf("날짜: %s\n", foundArticle.regDate);
         System.out.printf("제목: %s\n", foundArticle.title);
         System.out.printf("내용: %s\n", foundArticle.body);
+        System.out.printf("조회: %s\n", foundArticle.viewCnt);
 
       } else if (cmd.startsWith("article modify")) {
           String[] cmdBits = cmd.split(" ");
@@ -139,7 +143,7 @@ public class Main {
           }
 
           if (foundArticle == null) {
-            System.out.printf("%d번 게시물은 존재하지 않습니다.", id);
+            System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
             continue;
           }
 
@@ -153,12 +157,12 @@ public class Main {
         foundArticle.body = body;
         System.out.printf("%d번 게시물이 수정 되었습니다\n", id);
       } else {
-        System.out.println("존재하지 않는 명령어 입니다.");
+        System.out.println("존재하지 않는 명령어 입니다.\n");
       }
     }
 
 
-    System.out.println("프로그램 종료");
+    System.out.println("프로그램 종료\n");
     sc.close(); //스캐너 입력 닫아줌
   }
 }
@@ -170,11 +174,17 @@ class Article{
   String regDate;
   String title;
   String body;
+  int viewCnt;
 
   public Article(int id, String regDate, String title, String body){
     this.id = id;
     this.regDate = regDate;
     this.title = title;
     this.body =  body;
+    this.viewCnt = 0;
+  }
+
+  public void increaseViewCnt(){
+    viewCnt++;
   }
 }
