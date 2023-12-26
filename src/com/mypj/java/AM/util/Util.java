@@ -1,4 +1,4 @@
-package com.mypj.java.AM;
+package com.mypj.java.AM.util;
 //해당 클래스가 속한 패키지를 선언
 //패키지는 클래스들을 그룹화하는데 사용되며 여기서는 Util클래스가 속한다고 선언되어 있습니다.
 
